@@ -1,7 +1,10 @@
 import express from "express";
 import sqlite3 from "sqlite3";
+import cors from "cors";
+
 
 const app = express();
+app.use(cors())
 app.use(express.json()); // JSON parsing
 
 // SQLite DB connect
@@ -12,6 +15,8 @@ const db = new sqlite3.Database("./risks.db", (err) => {
     console.log("SQLite connected");
   }
 });
+
+
 
 // Table create
 db.run(`
@@ -30,7 +35,7 @@ db.run(`
 });
 
 // Add risk
-app.post("/add-risk", (req, res) => {
+app.post("/api/v1/add-risk", (req, res) => {
   const { asset, threat, likelihood, impact } = req.body;
 
   const score = likelihood * impact;
@@ -51,7 +56,7 @@ app.post("/add-risk", (req, res) => {
 });
 
 // Get all risks
-app.get("/risks", (req, res) => {
+app.get("/api/v1/risks", (req, res) => {
   db.all("SELECT * FROM risks", [], (err, rows) => {
     if (err) res.status(500).json({ error: err.message });
     else res.json(rows);
