@@ -49,9 +49,9 @@ app.post("/api/v1/add-risk", (req, res) => {
   else if (score > 5) level = "Medium";
 
   db.run(
-    `INSERT INTO risks (asset, threat, likelihood, impact, score, level)
-     VALUES (?, ?, ?, ?, ?, ?)`,
-    [asset, threat, likelihood, impact, score, level],
+    `INSERT INTO risks (asset, threat, likelihood, impact, score, level,hint)
+     VALUES (?, ?, ?, ?, ?, ? , ?)`,
+    [asset, threat, likelihood, impact, score, level , hint],
     function (err) {
       if (err) return res.status(500).json({ error: err.message });
 
